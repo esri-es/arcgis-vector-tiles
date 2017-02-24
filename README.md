@@ -9,3 +9,6 @@ Here you can find some samples to show you how to consume them using:
 * [AngularJS + ArcGIS API for JavaScript 4.x](http://esri.github.io/angular-esri-map/#/examples/vector-tiles)
 * [AngularJS + ArcGIS API for JavaScript 3.x](http://arcgis.github.io/angular-esri-map-site-v1/#/examples/vector-tile-layer)
 * [Leaflet](http://esri.github.io/esri-leaflet/examples/vector-basemap.html)
+
+## More about vector tiles
+You will find more resources in this [awesome list](https://esri-es.github.io/awesome-arcgis/arcgis/content/service-types/tile-map-service/vector-tiles/).
