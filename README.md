@@ -18,4 +18,4 @@ Here you can find some samples to show you how to consume them using:
 * etc.
 
 ## More info about vector tiles
-How to create new styles, advanges of using them, etc. Check this [awesome list](https://esri-es.github.io/awesome-arcgis/arcgis/content/service-types/tile-map-service/vector-tiles/) of resources.
+Learn how to create new styles, advanges of using them, etc. with this [awesome list](https://esri-es.github.io/awesome-arcgis/arcgis/content/service-types/tile-map-service/vector-tiles/) of resources.
