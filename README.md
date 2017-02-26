@@ -9,6 +9,12 @@ Here you can find some samples to show you how to consume them using:
 * [AngularJS + ArcGIS API for JavaScript 4.x](http://esri.github.io/angular-esri-map/#/examples/vector-tiles)
 * [AngularJS + ArcGIS API for JavaScript 3.x](http://arcgis.github.io/angular-esri-map-site-v1/#/examples/vector-tile-layer)
 * [Leaflet](http://esri.github.io/esri-leaflet/examples/vector-basemap.html)
+* [Runtime SDK for Android](https://developers.arcgis.com/android/latest/sample-code/vector-tile-url.htm)
+* [Runtime SDK for iOS](https://developers.arcgis.com/ios/latest/swift/sample-code/arcgis-vector-tile-layer-url-.htm) (or using a [custom style](https://github.com/Esri/arcgis-runtime-samples-ios/tree/master/arcgis-ios-sdk-samples/Layers/ArcGIS%20vector%20tiled%20layer%20(custom%20style)))
+* [Runtime SDK for macOS](https://developers.arcgis.com/macos/latest/swift/sample-code/arcgis-vector-tiled-layer-url.htm)
+* [Runtime SDK for .NET](https://developers.arcgis.com/net/latest/wpf/sample-code/arcgisvectortiledlayerurl.htm)
+* [Runtime SDK for Qt](https://developers.arcgis.com/qt/latest/qml/sample-code/sample-qt-vectortilelayerurl.htm)
+* etc.
 
-## More about vector tiles
-You will find more resources in this [awesome list](https://esri-es.github.io/awesome-arcgis/arcgis/content/service-types/tile-map-service/vector-tiles/).
+## More info about vector tiles
+How to create new styles, advanges of using them, etc. Check this [awesome list](https://esri-es.github.io/awesome-arcgis/arcgis/content/service-types/tile-map-service/vector-tiles/) of resources.
