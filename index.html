@@ -102,28 +102,31 @@
       });
 
       var buildStyleUrl = function(id){
-        return '//www.arcgis.com/sharing/rest/content/items/'+id+'/resources/styles/root.json';
+        return '//www.arcgis.com/sharing/rest/content/items/'+ id +'/resources/styles/root.json';
       };
 
-      window.changeStyle = function(url){
-        var styleUrl = buildStyleUrl(url),
-            $el = $('#styleUrl a');
+      window.changeStyle = function(id){
+        var styleUrl = buildStyleUrl(id),
+            $el = $('#styleUrl a'),
+            title = $( "img[src*='"+id+"']" ).attr('title');
         tileLyr.setStyle(styleUrl);
         $el.attr('href',styleUrl);
+
+        $('.calcite-title-main').text(title);
       };
 
       var tileLyr = new VectorTileLayer(buildStyleUrl('2557730096db4d2fa3e64980d431c29e'));
-      changeStyle('2557730096db4d2fa3e64980d431c29e');
+
 
       map.addLayer(tileLyr);
 
       var renderStyles = function(data){
-        var i, item, len = data.results.length;
+        var i, item, title, len = data.results.length;
 
         for(i=0 ; i < len; i++){
           item = data.results[i];
-
-          if(item.title.indexOf('Reference') === -1 && item.title.indexOf('Mature') === -1){
+          title = item.title.toLowerCase();
+          if(title.indexOf('reference') === -1 && title.indexOf('mature') === -1){
             $('#vector-styles ul').append(['<li>',
               '<img src="http://www.arcgis.com/sharing/rest/content/items/',
               item.id + '/info/' + item.thumbnail ,
@@ -135,6 +138,8 @@
             console.log('Discarded: (' + item.id + ') ', item.title, item.thumbnail);
           }
         }
+
+        changeStyle('2557730096db4d2fa3e64980d431c29e');
       };
 
       var esri_basemaps_items = '//www.arcgis.com/sharing/rest/search?q=(owner%3Aesri_basemaps)%20(type%3A%22Feature%20Collection%22%20OR%20type%3A%22Feature%20Service%22%20OR%20type%3A%22Image%20Service%22%20OR%20type%3A%22Map%20Service%22%20OR%20type%3A%22Vector%20Tile%20Service%22%20OR%20type%3A%22Scene%20Service%22%20OR%20type%3A%22Stream%20Service%22%20OR%20type%3A%20%22WMS%22%20OR%20type%3A%20%22WMTS%22%20OR%20type%3A%20%22WFS%22%20%20OR%20type%3A%20%22KML%22)%20-type%3A%22Web%20Map%22%20-type%3A%22Web%20Mapping%20Application%22%20-type%3A%22Shapefile%22%20-type%3A%22Layer%22%20-type%3A%20%22Map%20Document%22%20-type%3A%22Map%20Package%22%20-type%3A%22Basemap%20Package%22%20-type%3A%22Mobile%20Basemap%20Package%22%20-type%3A%22Mobile%20Map%20Package%22%20-type%3A%22ArcPad%20Package%22%20-type%3A%22Project%20Package%22%20-type%3A%22Project%20Template%22%20-type%3A%22Desktop%20Style%22%20-type%3A%22Pro%20Map%22%20-type%3A%22Layout%22%20-type%3A%22Explorer%20Map%22%20-type%3A%22Globe%20Document%22%20-type%3A%22Scene%20Document%22%20-type%3A%22Published%20Map%22%20-type%3A%22Map%20Template%22%20-type%3A%22Windows%20Mobile%20Package%22%20-type%3A%22Layer%20Package%22%20-type%3A%22Explorer%20Layer%22%20-type%3A%22Geoprocessing%20Package%22%20-type%3A%22Desktop%20Application%20Template%22%20-type%3A%22Code%20Sample%22%20-type%3A%22Geoprocessing%20Package%22%20-type%3A%22Geoprocessing%20Sample%22%20-type%3A%22Locator%20Package%22%20-type%3A%22Workflow%20Manager%20Package%22%20-type%3A%22Windows%20Mobile%20Package%22%20-type%3A%22Explorer%20Add%20In%22%20-type%3A%22Desktop%20Add%20In%22%20-type%3A%22File%20Geodatabase%22%20-type%3A%22Feature%20Collection%20Template%22%20-type%3A%22Code%20Attachment%22%20-type%3A%22Featured%20Items%22%20-type%3A%22Symbol%20Set%22%20-type%3A%22Color%20Set%22%20-type%3A%22Windows%20Viewer%20Add%20In%22%20-type%3A%22Windows%20Viewer%20Configuration%22%20&num=100&f=json';
@@ -164,9 +169,9 @@
       </div>
 
     <div class="calcite-title calcite-overflow-hidden">
-      <span class="calcite-title-main">ArcGIS Vector Tiles</span>
+      <span class="calcite-title-main"></span>
       <span class="calcite-title-divider hidden-xs"></span>
-      <span class="calcite-title-sub hidden-xs">From <a href="//www.arcgis.com/home/search.html?q=owner%3Aesri_vector&focus=layers-weblayers&restrict=false">esri_vector</a> &amp; <a href="//www.arcgis.com/home/search.html?q=owner%3Aesri_basemaps&focus=layers-weblayers&restrict=false">esri_basemaps</a></span>
+      <span class="calcite-title-sub hidden-xs">ArcGIS Vector Tiles from <a href="//www.arcgis.com/home/search.html?q=owner%3Aesri_vector&focus=layers-weblayers&restrict=false">esri_vector</a> &amp; <a href="//www.arcgis.com/home/search.html?q=owner%3Aesri_basemaps&focus=layers-weblayers&restrict=false">esri_basemaps</a></span>
       <div id="styleUrl" class="pull-right"><a target="_blank">Copy style URL</a></div>
     </div>
   </nav>
