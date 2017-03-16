@@ -35,11 +35,28 @@
       color: #dad7d7;
       text-decoration: underline;
     }
+    #styleUrl{
+      z-index: 1;
+
+      padding: 1rem 2rem;
+
+      color: #fff;
+      opacity: .4;
+      -webkit-transition: opacity .5s;
+      transition: opacity .5s;
+      position: absolute;
+
+      right: 1rem;
+    }
+    #styleUrl:hover{
+      opacity: 1;
+    }
+    #styleUrl a{color:white; text-decoration: none;}
   </style>
   <link rel="stylesheet" href="//esri.github.io/calcite-maps/dist/css/calcite-maps-bootstrap.min-v0.3.css">
   <link rel="stylesheet" href="//esri.github.io/calcite-maps/dist/css/calcite-maps-arcgis-3.x.min-v0.3.css"-->
-  <link rel="stylesheet" href="//js.arcgis.com/3.19/esri/themes/calcite/dijit/calcite.css">
-  <link rel="stylesheet" href="//js.arcgis.com/3.19/esri/themes/calcite/esri/esri.css">
+  <link rel="stylesheet" href="//js.arcgis.com/3.20/esri/themes/calcite/dijit/calcite.css">
+  <link rel="stylesheet" href="//js.arcgis.com/3.20/esri/themes/calcite/esri/esri.css">
   <script>
     var dojoConfig = (function () {
       return {
@@ -64,9 +81,10 @@
       };
     })();
   </script>
-  <script src="//js.arcgis.com/3.19/"></script>
+  <script src="//js.arcgis.com/3.20/"></script>
 
   <script>
+
     require([
       'esri/map',
       'esri/layers/VectorTileLayer',
@@ -87,31 +105,43 @@
         return '//www.arcgis.com/sharing/rest/content/items/'+id+'/resources/styles/root.json';
       };
 
-      var tileLyr = new VectorTileLayer(buildStyleUrl("763884983d3544c0a418a97992881fce"));
+      window.changeStyle = function(url){
+        var styleUrl = buildStyleUrl(url),
+            $el = $('#styleUrl a');
+        tileLyr.setStyle(styleUrl);
+        $el.attr('href',styleUrl);
+      };
+
+      var tileLyr = new VectorTileLayer(buildStyleUrl('2557730096db4d2fa3e64980d431c29e'));
+      changeStyle('2557730096db4d2fa3e64980d431c29e');
+
       map.addLayer(tileLyr);
 
       var renderStyles = function(data){
-        var i, len = data.results.length;
+        var i, item, len = data.results.length;
 
         for(i=0 ; i < len; i++){
-          var obj = data.results[i];
-          if(obj.title.indexOf("Reference") === -1 && obj.title.indexOf("Mature") === -1){
-            $("#vector-styles ul").append('<li>'+
-                '<img src="//www.arcgis.com/sharing/rest/content/items/'+obj.id+'/info/'+obj.thumbnail+'" onclick="changeStyle(\''+obj.id+'\')" alt="'+obj.title+'" title="'+obj.title+'">'+
+          item = data.results[i];
+
+          if(item.title.indexOf('Reference') === -1 && item.title.indexOf('Mature') === -1){
+            $('#vector-styles ul').append(['<li>',
+              '<img src="http://www.arcgis.com/sharing/rest/content/items/',
+              item.id + '/info/' + item.thumbnail ,
+              '" onclick="changeStyle(\'' + item.id+'\')" alt="' ,
+              item.title + '" title="' + item.title + '">' ,
               '</li>'
-            );
+            ].join('\n'));
+          }else{
+            console.log('Discarded: (' + item.id + ') ', item.title, item.thumbnail);
           }
-        };
+        }
       };
 
-      var esri_basemaps_items = "//www.arcgis.com/sharing/rest/search?q=(owner%3Aesri_basemaps)%20(type%3A%22Feature%20Collection%22%20OR%20type%3A%22Feature%20Service%22%20OR%20type%3A%22Image%20Service%22%20OR%20type%3A%22Map%20Service%22%20OR%20type%3A%22Vector%20Tile%20Service%22%20OR%20type%3A%22Scene%20Service%22%20OR%20type%3A%22Stream%20Service%22%20OR%20type%3A%20%22WMS%22%20OR%20type%3A%20%22WMTS%22%20OR%20type%3A%20%22WFS%22%20%20OR%20type%3A%20%22KML%22)%20-type%3A%22Web%20Map%22%20-type%3A%22Web%20Mapping%20Application%22%20-type%3A%22Shapefile%22%20-type%3A%22Layer%22%20-type%3A%20%22Map%20Document%22%20-type%3A%22Map%20Package%22%20-type%3A%22Basemap%20Package%22%20-type%3A%22Mobile%20Basemap%20Package%22%20-type%3A%22Mobile%20Map%20Package%22%20-type%3A%22ArcPad%20Package%22%20-type%3A%22Project%20Package%22%20-type%3A%22Project%20Template%22%20-type%3A%22Desktop%20Style%22%20-type%3A%22Pro%20Map%22%20-type%3A%22Layout%22%20-type%3A%22Explorer%20Map%22%20-type%3A%22Globe%20Document%22%20-type%3A%22Scene%20Document%22%20-type%3A%22Published%20Map%22%20-type%3A%22Map%20Template%22%20-type%3A%22Windows%20Mobile%20Package%22%20-type%3A%22Layer%20Package%22%20-type%3A%22Explorer%20Layer%22%20-type%3A%22Geoprocessing%20Package%22%20-type%3A%22Desktop%20Application%20Template%22%20-type%3A%22Code%20Sample%22%20-type%3A%22Geoprocessing%20Package%22%20-type%3A%22Geoprocessing%20Sample%22%20-type%3A%22Locator%20Package%22%20-type%3A%22Workflow%20Manager%20Package%22%20-type%3A%22Windows%20Mobile%20Package%22%20-type%3A%22Explorer%20Add%20In%22%20-type%3A%22Desktop%20Add%20In%22%20-type%3A%22File%20Geodatabase%22%20-type%3A%22Feature%20Collection%20Template%22%20-type%3A%22Code%20Attachment%22%20-type%3A%22Featured%20Items%22%20-type%3A%22Symbol%20Set%22%20-type%3A%22Color%20Set%22%20-type%3A%22Windows%20Viewer%20Add%20In%22%20-type%3A%22Windows%20Viewer%20Configuration%22%20&num=100&f=json";
-      var esri_vector_items = "//www.arcgis.com/sharing/rest/search?q=(owner%3Aesri_vector)%20(type%3A%22Feature%20Collection%22%20OR%20type%3A%22Feature%20Service%22%20OR%20type%3A%22Image%20Service%22%20OR%20type%3A%22Map%20Service%22%20OR%20type%3A%22Vector%20Tile%20Service%22%20OR%20type%3A%22Scene%20Service%22%20OR%20type%3A%22Stream%20Service%22%20OR%20type%3A%20%22WMS%22%20OR%20type%3A%20%22WMTS%22%20OR%20type%3A%20%22WFS%22%20%20OR%20type%3A%20%22KML%22)%20-type%3A%22Web%20Map%22%20-type%3A%22Web%20Mapping%20Application%22%20-type%3A%22Shapefile%22%20-type%3A%22Layer%22%20-type%3A%20%22Map%20Document%22%20-type%3A%22Map%20Package%22%20-type%3A%22Basemap%20Package%22%20-type%3A%22Mobile%20Basemap%20Package%22%20-type%3A%22Mobile%20Map%20Package%22%20-type%3A%22ArcPad%20Package%22%20-type%3A%22Project%20Package%22%20-type%3A%22Project%20Template%22%20-type%3A%22Desktop%20Style%22%20-type%3A%22Pro%20Map%22%20-type%3A%22Layout%22%20-type%3A%22Explorer%20Map%22%20-type%3A%22Globe%20Document%22%20-type%3A%22Scene%20Document%22%20-type%3A%22Published%20Map%22%20-type%3A%22Map%20Template%22%20-type%3A%22Windows%20Mobile%20Package%22%20-type%3A%22Layer%20Package%22%20-type%3A%22Explorer%20Layer%22%20-type%3A%22Geoprocessing%20Package%22%20-type%3A%22Desktop%20Application%20Template%22%20-type%3A%22Code%20Sample%22%20-type%3A%22Geoprocessing%20Package%22%20-type%3A%22Geoprocessing%20Sample%22%20-type%3A%22Locator%20Package%22%20-type%3A%22Workflow%20Manager%20Package%22%20-type%3A%22Windows%20Mobile%20Package%22%20-type%3A%22Explorer%20Add%20In%22%20-type%3A%22Desktop%20Add%20In%22%20-type%3A%22File%20Geodatabase%22%20-type%3A%22Feature%20Collection%20Template%22%20-type%3A%22Code%20Attachment%22%20-type%3A%22Featured%20Items%22%20-type%3A%22Symbol%20Set%22%20-type%3A%22Color%20Set%22%20-type%3A%22Windows%20Viewer%20Add%20In%22%20-type%3A%22Windows%20Viewer%20Configuration%22%20&num=100&f=json";
+      var esri_basemaps_items = '//www.arcgis.com/sharing/rest/search?q=(owner%3Aesri_basemaps)%20(type%3A%22Feature%20Collection%22%20OR%20type%3A%22Feature%20Service%22%20OR%20type%3A%22Image%20Service%22%20OR%20type%3A%22Map%20Service%22%20OR%20type%3A%22Vector%20Tile%20Service%22%20OR%20type%3A%22Scene%20Service%22%20OR%20type%3A%22Stream%20Service%22%20OR%20type%3A%20%22WMS%22%20OR%20type%3A%20%22WMTS%22%20OR%20type%3A%20%22WFS%22%20%20OR%20type%3A%20%22KML%22)%20-type%3A%22Web%20Map%22%20-type%3A%22Web%20Mapping%20Application%22%20-type%3A%22Shapefile%22%20-type%3A%22Layer%22%20-type%3A%20%22Map%20Document%22%20-type%3A%22Map%20Package%22%20-type%3A%22Basemap%20Package%22%20-type%3A%22Mobile%20Basemap%20Package%22%20-type%3A%22Mobile%20Map%20Package%22%20-type%3A%22ArcPad%20Package%22%20-type%3A%22Project%20Package%22%20-type%3A%22Project%20Template%22%20-type%3A%22Desktop%20Style%22%20-type%3A%22Pro%20Map%22%20-type%3A%22Layout%22%20-type%3A%22Explorer%20Map%22%20-type%3A%22Globe%20Document%22%20-type%3A%22Scene%20Document%22%20-type%3A%22Published%20Map%22%20-type%3A%22Map%20Template%22%20-type%3A%22Windows%20Mobile%20Package%22%20-type%3A%22Layer%20Package%22%20-type%3A%22Explorer%20Layer%22%20-type%3A%22Geoprocessing%20Package%22%20-type%3A%22Desktop%20Application%20Template%22%20-type%3A%22Code%20Sample%22%20-type%3A%22Geoprocessing%20Package%22%20-type%3A%22Geoprocessing%20Sample%22%20-type%3A%22Locator%20Package%22%20-type%3A%22Workflow%20Manager%20Package%22%20-type%3A%22Windows%20Mobile%20Package%22%20-type%3A%22Explorer%20Add%20In%22%20-type%3A%22Desktop%20Add%20In%22%20-type%3A%22File%20Geodatabase%22%20-type%3A%22Feature%20Collection%20Template%22%20-type%3A%22Code%20Attachment%22%20-type%3A%22Featured%20Items%22%20-type%3A%22Symbol%20Set%22%20-type%3A%22Color%20Set%22%20-type%3A%22Windows%20Viewer%20Add%20In%22%20-type%3A%22Windows%20Viewer%20Configuration%22%20&num=100&f=json';
+      var esri_vector_items = '//www.arcgis.com/sharing/rest/search?q=(owner%3Aesri_vector)%20(type%3A%22Feature%20Collection%22%20OR%20type%3A%22Feature%20Service%22%20OR%20type%3A%22Image%20Service%22%20OR%20type%3A%22Map%20Service%22%20OR%20type%3A%22Vector%20Tile%20Service%22%20OR%20type%3A%22Scene%20Service%22%20OR%20type%3A%22Stream%20Service%22%20OR%20type%3A%20%22WMS%22%20OR%20type%3A%20%22WMTS%22%20OR%20type%3A%20%22WFS%22%20%20OR%20type%3A%20%22KML%22)%20-type%3A%22Web%20Map%22%20-type%3A%22Web%20Mapping%20Application%22%20-type%3A%22Shapefile%22%20-type%3A%22Layer%22%20-type%3A%20%22Map%20Document%22%20-type%3A%22Map%20Package%22%20-type%3A%22Basemap%20Package%22%20-type%3A%22Mobile%20Basemap%20Package%22%20-type%3A%22Mobile%20Map%20Package%22%20-type%3A%22ArcPad%20Package%22%20-type%3A%22Project%20Package%22%20-type%3A%22Project%20Template%22%20-type%3A%22Desktop%20Style%22%20-type%3A%22Pro%20Map%22%20-type%3A%22Layout%22%20-type%3A%22Explorer%20Map%22%20-type%3A%22Globe%20Document%22%20-type%3A%22Scene%20Document%22%20-type%3A%22Published%20Map%22%20-type%3A%22Map%20Template%22%20-type%3A%22Windows%20Mobile%20Package%22%20-type%3A%22Layer%20Package%22%20-type%3A%22Explorer%20Layer%22%20-type%3A%22Geoprocessing%20Package%22%20-type%3A%22Desktop%20Application%20Template%22%20-type%3A%22Code%20Sample%22%20-type%3A%22Geoprocessing%20Package%22%20-type%3A%22Geoprocessing%20Sample%22%20-type%3A%22Locator%20Package%22%20-type%3A%22Workflow%20Manager%20Package%22%20-type%3A%22Windows%20Mobile%20Package%22%20-type%3A%22Explorer%20Add%20In%22%20-type%3A%22Desktop%20Add%20In%22%20-type%3A%22File%20Geodatabase%22%20-type%3A%22Feature%20Collection%20Template%22%20-type%3A%22Code%20Attachment%22%20-type%3A%22Featured%20Items%22%20-type%3A%22Symbol%20Set%22%20-type%3A%22Color%20Set%22%20-type%3A%22Windows%20Viewer%20Add%20In%22%20-type%3A%22Windows%20Viewer%20Configuration%22%20&num=100&f=json';
       $.getJSON(esri_basemaps_items, renderStyles);
       $.getJSON(esri_vector_items, renderStyles);
 
-      window.changeStyle = function(url){
-        tileLyr.setStyle(buildStyleUrl(url));
-      };
     });
   </script>
 </head>
@@ -137,6 +167,7 @@
       <span class="calcite-title-main">ArcGIS Vector Tiles</span>
       <span class="calcite-title-divider hidden-xs"></span>
       <span class="calcite-title-sub hidden-xs">From <a href="//www.arcgis.com/home/search.html?q=owner%3Aesri_vector&focus=layers-weblayers&restrict=false">esri_vector</a> &amp; <a href="//www.arcgis.com/home/search.html?q=owner%3Aesri_basemaps&focus=layers-weblayers&restrict=false">esri_basemaps</a></span>
+      <div id="styleUrl" class="pull-right"><a target="_blank">Copy style URL</a></div>
     </div>
   </nav>
 
